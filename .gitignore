@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Environment — never commit real secrets
+.env
+.env.*
+!.env.example
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Test and tooling artefacts
+coverage/
+.vitest/
+.eslintcache
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# Editors and OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Local scratch
+tmp/
+.cache/

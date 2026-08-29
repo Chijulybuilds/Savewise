@@ -1,0 +1,258 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Savewise theme tokens.
+ *
+ * Two palettes, each designed on its own terms rather than one inverted into
+ * the other. The light theme is warm paper and deep evergreen — printed
+ * statement, not glowing screen. The dark theme is a forest at night: the
+ * greens lift in saturation and lightness so they still read as brand rather
+ * than sludge, and the surfaces separate by *value* rather than by shadow,
+ * because shadows are close to invisible on a near-black canvas.
+ */
+
+@layer base {
+  :root {
+    /* Surfaces */
+    --canvas: 40 24% 97%;
+    --surface: 0 0% 100%;
+    --surface-raised: 0 0% 100%;
+    --surface-sunken: 40 18% 95%;
+
+    /* Lines */
+    --border: 38 15% 89%;
+    --border-strong: 38 12% 78%;
+    --ring: 164 55% 30%;
+
+    /* Text */
+    --ink: 168 26% 9%;
+    --ink-muted: 168 8% 40%;
+    --ink-subtle: 168 6% 54%;
+    --ink-inverse: 40 30% 97%;
+
+    /* Brand */
+    --primary: 164 62% 21%;
+    --primary-hover: 164 64% 16%;
+    --primary-soft: 164 38% 94%;
+    --primary-contrast: 40 30% 98%;
+
+    /* Accent — used sparingly, for the single most important thing on screen */
+    --accent: 24 70% 46%;
+    --accent-soft: 26 72% 95%;
+    --accent-contrast: 0 0% 100%;
+
+    /* Semantic states */
+    --positive: 158 58% 28%;
+    --positive-soft: 158 44% 94%;
+    --warning: 32 76% 40%;
+    --warning-soft: 38 82% 94%;
+    --critical: 4 64% 44%;
+    --critical-soft: 6 72% 96%;
+    --info: 205 52% 36%;
+    --info-soft: 205 60% 95%;
+
+    --shadow: 168 30% 12%;
+
+    /**
+     * Categorical chart palette.
+     *
+     * Ordered by contrast against the canvas rather than by hue family, so a
+     * two-series chart is legible before a six-series one is ever rendered.
+     * Deliberately not six shades of green: adjacent categories must be
+     * distinguishable at a glance and without relying on colour alone.
+     */
+    --chart-1: 164 62% 26%;
+    --chart-2: 24 70% 50%;
+    --chart-3: 199 58% 38%;
+    --chart-4: 268 32% 48%;
+    --chart-5: 43 74% 42%;
+    --chart-6: 340 45% 46%;
+    --chart-grid: 38 14% 88%;
+  }
+
+  .dark {
+    --canvas: 168 24% 6%;
+    --surface: 168 18% 9%;
+    --surface-raised: 168 16% 12%;
+    --surface-sunken: 170 26% 4%;
+
+    --border: 168 12% 18%;
+    --border-strong: 168 12% 28%;
+    --ring: 158 54% 52%;
+
+    --ink: 40 26% 95%;
+    --ink-muted: 165 9% 67%;
+    --ink-subtle: 165 8% 50%;
+    --ink-inverse: 168 26% 8%;
+
+    --primary: 158 50% 50%;
+    --primary-hover: 158 54% 60%;
+    --primary-soft: 162 32% 14%;
+    --primary-contrast: 168 32% 7%;
+
+    --accent: 26 76% 60%;
+    --accent-soft: 26 34% 16%;
+    --accent-contrast: 26 45% 9%;
+
+    --positive: 156 48% 52%;
+    --positive-soft: 156 32% 14%;
+    --warning: 36 78% 60%;
+    --warning-soft: 36 38% 15%;
+    --critical: 4 68% 62%;
+    --critical-soft: 4 36% 16%;
+    --info: 202 58% 60%;
+    --info-soft: 202 38% 15%;
+
+    --shadow: 168 60% 2%;
+
+    --chart-1: 158 50% 52%;
+    --chart-2: 26 76% 60%;
+    --chart-3: 199 60% 58%;
+    --chart-4: 268 46% 68%;
+    --chart-5: 43 76% 58%;
+    --chart-6: 340 55% 64%;
+    --chart-grid: 168 12% 18%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    /* Keeps the layout from shifting sideways when a modal locks scrolling. */
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    @apply bg-canvas text-ink font-sans antialiased;
+    /* `cv11` gives Inter a single-storey `l`, which stops "1" and "l" reading
+       alike in an interface that is mostly numbers. */
+    font-feature-settings: 'cv11', 'ss01';
+    text-rendering: optimizeLegibility;
+  }
+
+  /**
+   * Money must never jitter. Tabular figures keep every digit the same width,
+   * so a counting animation or a live-updating balance stays put instead of
+   * shuffling the layout on each frame.
+   */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
+  }
+
+  h1, h2, h3, h4 {
+    @apply text-ink;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /**
+   * A visible focus ring on every interactive element, always. Removing it is
+   * the single most common accessibility regression in a design system, so the
+   * rule lives in base styles rather than being reapplied per component.
+   */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-canvas;
+  }
+
+  ::selection {
+    @apply bg-primary/20 text-ink;
+  }
+
+  /* Scrollbars, themed rather than left to the OS default. */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full border-[3px] border-solid border-transparent bg-border-strong bg-clip-content;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-ink-subtle bg-clip-content;
+  }
+
+  /**
+   * Reduced motion.
+   *
+   * Transforms and fades are collapsed to something instant rather than removed
+   * outright — an element must still end up visible, or a viewport-triggered
+   * reveal would leave the page permanently blank for anyone who asked for less
+   * motion.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /**
+   * A page-wide gutter that holds at 320px and stops growing past the content
+   * width. Used by every layout so left edges align down the whole product.
+   */
+  .container-page {
+    @apply mx-auto w-full max-w-content px-5 sm:px-6 lg:px-10;
+  }
+
+  /* The one-line grid separator used between dashboard sections. */
+  .hairline {
+    @apply border-t border-border;
+  }
+
+  /**
+   * The marketing pages' background texture: an extremely low-contrast grid,
+   * drawn in CSS rather than shipped as an image.
+   */
+  .grid-texture {
+    background-image:
+      linear-gradient(to right, hsl(var(--border) / 0.5) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border) / 0.5) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  /* Fades a decorative element out toward the edges of the viewport. */
+  .mask-fade-edges {
+    mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+  }
+
+  .skeleton {
+    @apply relative overflow-hidden rounded-lg bg-surface-sunken;
+  }
+
+  .skeleton::after {
+    @apply absolute inset-0 -translate-x-full animate-shimmer;
+    content: '';
+    background-image: linear-gradient(90deg, transparent, hsl(var(--ink) / 0.05), transparent);
+  }
+}
+
+@layer utilities {
+  /* Visually hidden, but still announced by a screen reader. */
+  .sr-only-focusable:not(:focus):not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}

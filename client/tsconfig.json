@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"],
+    "jsx": "react-jsx",
+    // Resolved relative to this file. `baseUrl` is deliberately absent: it has
+    // not been required alongside `paths` since TypeScript 4.1, and it makes
+    // bare specifiers resolve from the project root *before* node_modules —
+    // so a local `src/react.ts` would silently shadow the real React.
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "vite.config.ts", "tailwind.config.ts"]
+}

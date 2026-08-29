@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /$
+Allow: /features
+Allow: /pricing
+Allow: /faq
+
+# The application itself holds personal financial records and has nothing
+# useful to index.
+Disallow: /dashboard
+Disallow: /goals
+Disallow: /budget
+Disallow: /transactions
+Disallow: /plans
+Disallow: /analytics
+Disallow: /insights
+Disallow: /settings
+Disallow: /onboarding
+Disallow: /login
+Disallow: /register

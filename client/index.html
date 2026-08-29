@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+    <title>Savewise — Build the habit. Reach the goal.</title>
+    <meta
+      name="description"
+      content="Savewise turns income into intentional saving: goals with real deadlines, budgets you can keep, and plain-English insights from your own numbers."
+    />
+    <link rel="canonical" href="https://savewise.app/" />
+    <meta name="theme-color" content="#0d3a2c" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a1310" media="(prefers-color-scheme: dark)" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Savewise" />
+    <meta property="og:title" content="Savewise — Build the habit. Reach the goal." />
+    <meta
+      property="og:description"
+      content="Goals with real deadlines, budgets you can keep, and plain-English insights from your own numbers."
+    />
+    <meta property="og:url" content="https://savewise.app/" />
+    <meta property="og:image" content="/og-image.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Savewise — Build the habit. Reach the goal." />
+    <meta
+      name="twitter:description"
+      content="Goals with real deadlines, budgets you can keep, and plain-English insights from your own numbers."
+    />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Instrument+Serif:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      /**
+       * Applied before first paint so a returning dark-mode user never sees a
+       * flash of the light theme. Deliberately inline and tiny — anything that
+       * has to wait for the bundle is already too late.
+       */
+      (function () {
+        try {
+          var stored = localStorage.getItem('savewise.theme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var dark = stored ? stored === 'dark' : prefersDark;
+          document.documentElement.classList.toggle('dark', dark);
+          document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+        } catch (error) {
+          /* Private mode with storage disabled — fall through to the light theme. */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <div style="padding: 2rem; font-family: system-ui, sans-serif">
+        <h1>Savewise needs JavaScript</h1>
+        <p>Please enable JavaScript to plan your savings.</p>
+      </div>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

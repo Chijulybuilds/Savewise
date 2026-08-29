@@ -1,0 +1,18 @@
+{
+  "name": "@savewise/shared",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Domain contracts, money primitives and the financial calculation engine shared by the Savewise client and server.",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^3.24.1"
+  }
+}
