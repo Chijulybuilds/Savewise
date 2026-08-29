@@ -2,7 +2,24 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "lib": ["ES2023"],
-    "types": ["node"]
+    "types": ["node"],
+
+    /**
+     * Node-accurate module resolution, overriding the base config's `bundler`.
+     *
+     * The base setting is right for the client, whose code Vite resolves. It is
+     * wrong here: this is a Node ESM service (`"type": "module"`), and `bundler`
+     * applies loose interop rules that make local type-checking *more permissive
+     * than the runtime*. That gap is not theoretical — it hid two real
+     * CommonJS/ESM interop bugs that only surfaced when a stricter checker ran
+     * over the same source.
+     *
+     * `nodenext` models exactly what Node does: a CJS package's default export
+     * is its whole `module.exports`, so importing it as a callable is an error
+     * here, as it would be at runtime under a non-transpiling loader.
+     */
+    "module": "nodenext",
+    "moduleResolution": "nodenext"
   },
   "include": ["src/**/*.ts", "tests/**/*.ts", "vitest.config.ts", "tsup.config.ts"]
 }

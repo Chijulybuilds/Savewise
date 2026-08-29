@@ -4,7 +4,11 @@ import cors from 'cors';
 import express, { type Express } from 'express';
 import helmet from 'helmet';
 import mongoose from 'mongoose';
-import pinoHttp from 'pino-http';
+// Named, not default. `pino-http` is a CommonJS package whose `.d.ts` declares
+// ESM exports, so under Node's real resolution its "default" is the whole
+// `module.exports` namespace — an object, not a callable. The package exports
+// `PinoHttp as pinoHttp` for exactly this reason.
+import { pinoHttp } from 'pino-http';
 
 import { allowedOrigins, env, isProduction, isTest } from './config/env.js';
 import { logger } from './config/logger.js';
