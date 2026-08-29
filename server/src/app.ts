@@ -2,13 +2,30 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { type Express } from 'express';
-import helmet from 'helmet';
+import * as helmetModule from 'helmet';
 import mongoose from 'mongoose';
 // Named, not default. `pino-http` is a CommonJS package whose `.d.ts` declares
 // ESM exports, so under Node's real resolution its "default" is the whole
 // `module.exports` namespace — an object, not a callable. The package exports
 // `PinoHttp as pinoHttp` for exactly this reason.
 import { pinoHttp } from 'pino-http';
+
+/**
+ * `helmet` reached through its namespace rather than as a default import.
+ *
+ * The package ships both CJS and ESM type declarations and declares no `types`
+ * condition in its `exports` map, so different `moduleResolution` settings
+ * disagree about the shape of its default export: the ESM view sees a callable
+ * function, the CJS view sees a namespace object holding one. A plain
+ * `import helmet from 'helmet'` therefore compiles under some toolchains and
+ * fails with "this expression is not callable" under others.
+ *
+ * Reading `.default` off the namespace is correct in both views, and correct at
+ * runtime in both builds — `index.mjs` exports `helmet as default`, and
+ * `index.cjs` deliberately self-references with `module.exports.default =
+ * module.exports` for exactly this interop case.
+ */
+const helmet = helmetModule.default;
 
 import { allowedOrigins, env, isProduction, isTest } from './config/env.js';
 import { logger } from './config/logger.js';
