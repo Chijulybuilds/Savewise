@@ -7,10 +7,12 @@ import { durationToMs } from './tokens.js';
  * Auth cookie policy.
  *
  * - `httpOnly` — page JavaScript cannot read the tokens, so XSS cannot steal a session.
- * - `sameSite: 'lax'` in dev (client on :5173, API on :5000 — same site, different port)
- *   and `'strict'` in production, where both are served from one origin. Either way
- *   a cross-site form post cannot carry the cookie.
- * - `secure` — required in production; the env schema refuses to boot without it.
+ * - `sameSite: 'lax'` in dev (client on :5173, API on :5000 — same site, different port),
+ *   `'strict'` in a same-origin production deployment, or `'none'` when
+ *   `COOKIE_CROSS_SITE` says the client and API live on different domains — the
+ *   only setting a browser will honour for a genuinely cross-site request.
+ * - `secure` — required in production, and forced on whenever `sameSite` is
+ *   `'none'`, since a browser refuses that combination without it.
  * - `signed` — tampering with the cookie value invalidates it before it is parsed.
  * - The refresh cookie is scoped to `/api/auth`, so it is not attached to the
  *   hundreds of ordinary API calls that have no business seeing it.
@@ -20,10 +22,15 @@ export const ACCESS_TOKEN_COOKIE = 'sw_at';
 export const REFRESH_TOKEN_COOKIE = 'sw_rt';
 
 function baseOptions(): CookieOptions {
+  const crossSite = env.COOKIE_CROSS_SITE;
+
   return {
     httpOnly: true,
-    secure: env.COOKIE_SECURE,
-    sameSite: isProduction ? 'strict' : 'lax',
+    // `SameSite=None` is rejected by browsers unless `Secure` is also set, so
+    // cross-site mode turns this on independent of `COOKIE_SECURE` — there is
+    // no configuration in which a cross-site cookie should travel over HTTP.
+    secure: env.COOKIE_SECURE || crossSite,
+    sameSite: crossSite ? 'none' : isProduction ? 'strict' : 'lax',
     signed: true,
     ...(env.COOKIE_DOMAIN ? { domain: env.COOKIE_DOMAIN } : {}),
   };

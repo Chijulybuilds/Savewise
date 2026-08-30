@@ -59,6 +59,19 @@ const envSchema = z
     COOKIE_SECRET: secretSchema('COOKIE_SECRET'),
     COOKIE_SECURE: booleanSchema.default('false'),
     COOKIE_DOMAIN: z.string().optional(),
+    /**
+     * Set to `true` only when the client and API are deployed to two different
+     * registrable domains — e.g. a Vercel-hosted client calling a Render-hosted
+     * API. A browser will not send a `SameSite=Strict` or `Lax` cookie to a
+     * different site under any circumstances, so a split deployment with the
+     * default `false` here logs a user in and then 401s every request after,
+     * with nothing informative in the browser console to explain why.
+     *
+     * `SameSite=None` requires `Secure`, so this forces it on regardless of
+     * `COOKIE_SECURE` — a split deployment is https-to-https by construction,
+     * and there is no safe way to send a cross-site cookie over plain HTTP.
+     */
+    COOKIE_CROSS_SITE: booleanSchema.default('false'),
 
     CLIENT_URL: z.string().default('http://localhost:5173'),
 
