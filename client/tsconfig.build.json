@@ -1,0 +1,31 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    /**
+     * `vite/client` is the one entry the shipped app actually needs — it types
+     * `import.meta.env` and asset imports (`*.svg`, `*.css`, …).
+     *
+     * `vitest/globals` and `@testing-library/jest-dom`, present in the base
+     * config for the editor and `npm run typecheck`, are deliberately dropped
+     * here. `vitest` is not a dependency of this package at all — it lives in
+     * the workspace root's devDependencies — and a production install (Vercel
+     * sets `NODE_ENV=production`, under which npm omits devDependencies) will
+     * not have it. Requiring it in the config that gates `vite build` made a
+     * shippable build depend on a package that is never actually shipped.
+     */
+    "types": ["vite/client"]
+  },
+  /**
+   * Narrowed to application source only. `vite.config.ts` and
+   * `tailwind.config.ts` are tooling, not part of the built app — Vite
+   * executes the former directly and never type-checks it — and
+   * `vite.config.ts` carries its own `/// <reference types="vitest" />`,
+   * which would reintroduce the exact dependency this file exists to remove.
+   *
+   * `include` fully replaces the base config's value rather than extending
+   * it (TypeScript does not merge `include`/`exclude` across `extends`), so
+   * this list is deliberately self-contained.
+   */
+  "include": ["src"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/test/**"]
+}
